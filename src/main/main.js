@@ -65,12 +65,8 @@ ipcMain.handle('database-query', async (event, query, params) => {
     }
 });
 
-ipcMain.on('show-notification', (event, message) => {
-    const notification = new Notification({
-        title: 'My Mac App',
-        body: message,
-    });
-    notification.show();
+ipcMain.on('show-notification', (event, { title, message }) => {
+    new Notification({ title, body: message }).show();
 });
 
 ipcMain.on('toggle-devtools', () => {

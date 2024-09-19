@@ -1,4 +1,6 @@
 // src/renderer/components/TaskItem.jsx
+
+// this file is used within the **task list* file to render each task item
 import React, { useState } from 'react';
 
 function TaskItem({ task, toggleComplete, deleteTask, editTask }) {
