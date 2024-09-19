@@ -119,23 +119,29 @@ h1, h2 {
     background-color: #fff;
 }
 
-/* Style for the input boxes */
-.timer-input {
-    width: 40px;
-    padding: 5px;
-    margin: 0 5px;
-    font-size: 16px;
+/* Style for the timer display */
+.timer-display {
+    font-size: 64px; /* Increase the font size for better visibility */
+    font-weight: bold;
+    margin: 20px 0;
     text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    appearance: none; /* Remove the up/down arrows */
-    -moz-appearance: textfield; /* Remove arrows in Firefox */
+    border-bottom: 2px dashed transparent; /* No border by default */
 }
 
-.timer-input::-webkit-outer-spin-button,
-.timer-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.timer-display:focus {
+    outline: none; /* Remove default focus outline */
+    border-bottom: 2px dashed #007bff; /* Show a dashed line when editing */
+}
+
+/* Style for the input fields when editing */
+.timer-edit {
+    font-size: 48px;
+    font-weight: bold;
+    width: 60px;
+    text-align: center;
+    border: none;
+    border-bottom: 2px solid #007bff;
+    outline: none;
 }
 
 /* Button styling */

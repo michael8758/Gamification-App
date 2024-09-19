@@ -1,12 +1,10 @@
 // src/renderer/components/PomodoroTimer.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function PomodoroTimer() {
-    const [time, setTime] = useState(25 * 60); // Default 25 minutes
+    const [time, setTime] = useState(50 * 60); // Default 50 minutes
     const [isActive, setIsActive] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
-    const [minutes, setMinutes] = useState(25);
-    const [seconds, setSeconds] = useState(0);
+    const timerRef = useRef(null);
 
     // Convert seconds to MM:SS format
     const formatTime = (seconds) => {
@@ -32,8 +30,11 @@ function PomodoroTimer() {
     }, [isActive, time]);
 
     const handleStart = () => {
-        setTime((minutes * 60) + seconds); // Set the timer using edited minutes and seconds
-        setIsActive(true);
+        const [minutes, seconds] = timerRef.current.innerText.split(':').map(Number);
+        if (!isNaN(minutes) && !isNaN(seconds)) {
+            setTime(minutes * 60 + seconds);
+            setIsActive(true);
+        }
     };
 
     const handleStop = () => {
@@ -43,62 +44,27 @@ function PomodoroTimer() {
     const handleReset = () => {
         setIsActive(false);
         setTime(25 * 60);
-        setMinutes(25);
-        setSeconds(0);
     };
 
-    const handleMinutesChange = (event) => {
-        const value = event.target.value;
-        setMinutes(value === '' ? '' : Math.max(0, Math.min(59, Number(value))));
-    };
-
-    const handleSecondsChange = (event) => {
-        const value = event.target.value;
-        setSeconds(value === '' ? '' : Math.max(0, Math.min(59, Number(value))));
-    };
-
-    const handleClick = () => {
-        if (isActive) {
-            handleStop();
-        } else {
-            setIsEditing(true);
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleStart();
+            event.preventDefault(); // Prevent line break in contenteditable
         }
-    };
-
-    const handleBlur = () => {
-        setIsEditing(false);
     };
 
     return (
         <div className="container">
             <h2>Pomodoro Timer</h2>
-            <div onClick={handleClick} style={{ cursor: isActive ? 'pointer' : 'default' }}>
-                {isEditing ? (
-                    <div>
-                        <input 
-                            type="number" 
-                            value={minutes}
-                            onChange={handleMinutesChange}
-                            onBlur={handleBlur}
-                            placeholder="MM"
-                            min="0"
-                            max="59"
-                            className="timer-input"
-                        /> : 
-                        <input 
-                            type="number" 
-                            value={seconds}
-                            onChange={handleSecondsChange}
-                            onBlur={handleBlur}
-                            placeholder="SS"
-                            min="0"
-                            max="59"
-                            className="timer-input"
-                        />
-                    </div>
-                ) : (
-                    <div>{formatTime(time)}</div>
-                )}
+            <div 
+                ref={timerRef}
+                className="timer-display"
+                contentEditable={!isActive} 
+                onKeyPress={handleKeyPress}
+                suppressContentEditableWarning={true} // To avoid React warning
+                style={{ cursor: isActive ? 'default' : 'text' }}
+            >
+                {formatTime(time)}
             </div>
             {!isActive && (
                 <div className="button-group">

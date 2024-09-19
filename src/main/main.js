@@ -31,8 +31,7 @@ function createWindow() {
 
     mainWindow.on('close', (event) => {
         if (process.platform === 'darwin') {
-            event.preventDefault();
-            mainWindow.hide();
+            app.quit(); // Ensure the app quits completely on macOS
         } else {
             mainWindow = null;
         }
