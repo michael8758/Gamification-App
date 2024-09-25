@@ -1,9 +1,9 @@
-// src/renderer/components/PomodoroTimer.jsx
 import React, { useState, useEffect, useRef } from 'react';
 
 function PomodoroTimer() {
     const [time, setTime] = useState(50 * 60); // Default 50 minutes
     const [isActive, setIsActive] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const timerRef = useRef(null);
 
     // Convert seconds to MM:SS format
@@ -15,35 +15,37 @@ function PomodoroTimer() {
 
     useEffect(() => {
         let interval = null;
-        if (isActive && time > 0) {
+        if (isActive && !isPaused && time > 0) {
             interval = setInterval(() => {
                 setTime((time) => time - 1);
+                window.electronAPI.send('update-timer', formatTime(time - 1)); // Send updated time to main
             }, 1000);
         } else if (isActive && time === 0) {
-            // Send a message to the main process to show the notification
             window.electronAPI.sendNotification('Pomodoro Timer', 'Time is up!');
-            setIsActive(false); // Stop the timer
-        } else if (!isActive && time !== 0) {
+            setIsActive(false);
+        } else {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [isActive, time]);
+    }, [isActive, isPaused, time]);
 
     const handleStart = () => {
         const [minutes, seconds] = timerRef.current.innerText.split(':').map(Number);
         if (!isNaN(minutes) && !isNaN(seconds)) {
             setTime(minutes * 60 + seconds);
             setIsActive(true);
+            setIsPaused(false);
         }
     };
 
-    const handleStop = () => {
-        setIsActive(false);
+    const handlePause = () => {
+        setIsPaused(!isPaused);
     };
 
     const handleReset = () => {
         setIsActive(false);
-        setTime(25 * 60);
+        setIsPaused(false);
+        setTime(50 * 60);
     };
 
     const handleKeyPress = (event) => {
@@ -59,16 +61,24 @@ function PomodoroTimer() {
             <div 
                 ref={timerRef}
                 className="timer-display"
-                contentEditable={!isActive} 
-                onKeyPress={handleKeyPress}
-                suppressContentEditableWarning={true} // To avoid React warning
-                style={{ cursor: isActive ? 'default' : 'text' }}
+                contentEditable={!isActive || isPaused} // Editable when not active or paused
+                onKeyDown={handleKeyPress}
+                suppressContentEditableWarning={true}
+                style={{ cursor: isActive && !isPaused ? 'default' : 'text' }}
             >
                 {formatTime(time)}
             </div>
             {!isActive && (
                 <div className="button-group">
                     <button className="button" onClick={handleStart}>Start</button>
+                    <button className="button" onClick={handleReset}>Reset</button>
+                </div>
+            )}
+            {isActive && (
+                <div className="button-group">
+                    <button className="button" onClick={handlePause}>
+                        {isPaused ? 'Resume' : 'Pause'}
+                    </button>
                     <button className="button" onClick={handleReset}>Reset</button>
                 </div>
             )}

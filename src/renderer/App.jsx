@@ -1,13 +1,14 @@
 // src/renderer/App.jsx
 import React, { useState, useEffect } from 'react';
-//import { OnceUIProvider } from '@once-ui/core';
+import Sidebar from './components/Sidebar';
 import PomodoroTimer from './components/PomodoroTimer';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import './styles.css';
 
 function App() {
-    const [tasks, setTasks] = useState([]);
+    const [currentTab, setCurrentTab] = useState('dashboard');
+    const [tasks, setTasks] = useState([]); // Define tasks state
 
     // Fetch tasks from the database
     const fetchTasks = async () => {
@@ -74,21 +75,29 @@ function App() {
     };
 
     return (
-        //<OnceUIProvider>
-            <div>
-                <h1>Welcome to My Mac App</h1>
-                <p>This is a simple Electron app designed for macOS.</p>
-                <h2>Task Management</h2>
-                <TaskInput addTask={addTask} />
-                <TaskList 
-                    tasks={tasks} 
-                    toggleComplete={toggleComplete} 
-                    deleteTask={deleteTask} 
-                    editTask={editTask} 
-                />
-                <PomodoroTimer />
+        <div className="app-container">
+            <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+            <div className="content">
+                {currentTab === 'dashboard' && (
+                    <div>
+                        <h1>Dashboard</h1>
+                        <PomodoroTimer />
+                    </div>
+                )}
+                {currentTab === 'tasks' && (
+                    <div>
+                        <h1>Tasks</h1>
+                        <TaskInput addTask={addTask} />
+                        <TaskList 
+                            tasks={tasks} 
+                            toggleComplete={toggleComplete} 
+                            deleteTask={deleteTask} 
+                            editTask={editTask}
+                        />
+                    </div>
+                )}
             </div>
-        //</OnceUIProvider>
+        </div>
     );
 }
 

@@ -163,3 +163,35 @@ h1, h2 {
 .button:hover {
     background-color: #0056b3;
 }
+
+/* styles.css */
+.app-container {
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+.tab-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tab-button.active {
+    background-color: #0056b3;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}

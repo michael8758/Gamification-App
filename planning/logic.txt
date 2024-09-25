@@ -2,16 +2,16 @@ Gamified Workflow Enhancement App Architecture
 
 also sign in page that records all information in database
 
-1. Application Structure
+1. Application Structure [x]
    - Electron main process
    - Renderer process (React.js for UI)
    - Node.js backend services
 
-2. Core Components
+2. Core Components 
    2.1 Task Management
-       - Task creation, editing, and deletion
-       - Task categorization (study, work, personal)
-       - Priority levels
+       - Task creation, editing, and deletion [x]
+       - Task categorization (study, work, personal) 
+       - Priority levels 
        - Due dates and reminders
 
    2.2 Time Tracking

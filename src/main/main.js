@@ -3,8 +3,8 @@ const path = require('path');
 const { promisePool, testConnection } = require(path.join(__dirname, '../backend/database'));
 
 let mainWindow;
-let tray = null;
-
+let tray;
+let interval;
 let items = [];
 let deletedIds = [];
 let nextId = 1;
@@ -76,6 +76,12 @@ ipcMain.on('toggle-devtools', () => {
     }
 });
 
+ipcMain.on('update-timer', (event, time) => {
+    if (tray) {
+        tray.setToolTip(`Time Remaining: ${time}`); // Update the tray title with the remaining time
+    }
+});
+
 // Create the application menu
 function createMenu() {
     const menuTemplate = [
@@ -115,9 +121,7 @@ function createTray() {
 app.whenReady().then(() => {
     createWindow();
     createMenu();
-    if (process.platform === 'darwin') {
-        createTray();
-    }
+    createTray();
 
     // Register a global shortcut to reload the window
     globalShortcut.register('CmdOrCtrl+R', () => {
