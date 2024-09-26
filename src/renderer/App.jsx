@@ -1,6 +1,6 @@
 // src/renderer/App.jsx
 import React, { useState, useEffect } from 'react';
-import Sidebar from './components/Sidebar';
+import Menu from './components/Menu';
 import PomodoroTimer from './components/PomodoroTimer';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
@@ -34,9 +34,7 @@ function App() {
             return;
         }
         try {
-            console.log('Adding task:', text); // Debug log
             await window.electronAPI.databaseQuery('INSERT INTO tasks (title) VALUES (?)', [text]);
-            console.log('Task added successfully'); // Debug log
             fetchTasks(); // Refresh task list
         } catch (error) {
             console.error('Error adding task:', error);
@@ -76,7 +74,7 @@ function App() {
 
     return (
         <div className="app-container">
-            <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+            <Menu setCurrentTab={setCurrentTab} /> {/* Only Menu component is used now */}
             <div className="content">
                 {currentTab === 'dashboard' && (
                     <div>
