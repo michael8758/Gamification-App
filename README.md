@@ -7,7 +7,17 @@ The **Gamification Productivity Manager** is a desktop application built using *
 This app consists of the following features:
 
 •	**Task Management**: Create, update, delete, and mark tasks as complete  
+
+
+https://github.com/user-attachments/assets/827f4a4a-586d-4c60-ae65-b7439c78645e
+
+
 •	**Pomodoro Timer**: A customizable countdown timer for productivity  
+
+
+https://github.com/user-attachments/assets/21f13ca7-2554-45b0-abc5-4d400ae9a72c
+
+
 •	**Cross-Platform**: Runs on macOS, Windows, and Linux via Electron  
 •	**Backend API**: Built with **Express** and **MySQL** for persistent data storage  
 
