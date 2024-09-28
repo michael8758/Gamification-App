@@ -30,9 +30,37 @@ This app is structured as follows:
 •	**src/renderer/**: Frontend React components for the user interface  
 •	**backend/**: The Express API server and database connection  
 
-# Tech Stack
+
+# Installation Instructions
+
+**1. Clone the repository:**  
+```git clone https://github.com/michaelliang8758/gamification-app.git```
+
+**2. Change into Main directory:**  
+```cd gamification-app```
+
+**3. Install Dependencies**  
+```npm install```
+
+**4. Start the Application**  
+```npm start```
+
+# How to Use
+
+**Task Management**
+
+	•	Add a task using the input field  
+	•	Edit or delete tasks from the list  
+	•	Mark tasks as completed  
+
+**Pomodoro Timer**
+
+	•	Set a custom time and start the Pomodoro Timer for focused work sessions
+
+ # Tech Stack
 
 •	**Electron**: Cross-platform desktop apps  
 •	**React**: Frontend user interface  
 •	**MySQL**: Database for task persistence  
 •	**Express**: Backend API for task management  
+
