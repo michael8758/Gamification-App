@@ -54,12 +54,15 @@ app.post('/tasks', async (req, res) => {
 app.put('/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { completed } = req.body;
-        await promisePool.query('UPDATE tasks SET completed = ? WHERE id = ?', [completed, id]);
-        res.json({ message: 'Task completion updated successfully' });
+        const { title, completed } = req.body;
+        const query = title ? 'UPDATE tasks SET title = ? WHERE id = ?' : 'UPDATE tasks SET completed = ? WHERE id = ?';
+        const params = title ? [title, id] : [completed, id];
+
+        await promisePool.query(query, params);
+        res.json({ message: 'Task updated successfully' });
     } catch (error) {
-        console.error('Error updating task completion:', error);
-        res.status(500).json({ error: 'Failed to update task completion' });
+        console.error('Error updating task:', error);
+        res.status(500).json({ error: 'Failed to update task' });
     }
 });
 

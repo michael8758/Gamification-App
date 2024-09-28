@@ -81,9 +81,9 @@ function App() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: newText })
             });
-            fetchTasks(); // Refresh task list
+            fetchTasks(); // Refresh task list after editing
         } catch (error) {
-            console.error('Error saving task:', error);
+            console.error('Error editing task:', error);
         }
     };
 
