@@ -10,10 +10,11 @@ function App() {
     const [currentTab, setCurrentTab] = useState('dashboard');
     const [tasks, setTasks] = useState([]); // Define tasks state
 
-    // Fetch tasks from the database
+    // Fetch tasks from the REST API
     const fetchTasks = async () => {
         try {
-            const fetchedTasks = await window.electronAPI.databaseQuery('SELECT * FROM tasks', []);
+            const response = await fetch('http://localhost:3000/tasks'); // Fetch from your API
+            const fetchedTasks = await response.json();
             setTasks(fetchedTasks.map(task => ({
                 id: task.id,
                 text: task.title,
@@ -34,7 +35,11 @@ function App() {
             return;
         }
         try {
-            await window.electronAPI.databaseQuery('INSERT INTO tasks (title) VALUES (?)', [text]);
+            await fetch('http://localhost:3000/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: text })
+            });
             fetchTasks(); // Refresh task list
         } catch (error) {
             console.error('Error adding task:', error);
@@ -43,7 +48,11 @@ function App() {
 
     const toggleComplete = async (id, completed) => {
         try {
-            await window.electronAPI.databaseQuery('UPDATE tasks SET completed = ? WHERE id = ?', [completed ? 1 : 0, id]);
+            await fetch(`http://localhost:3000/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed })
+            });
             fetchTasks(); // Refresh task list
         } catch (error) {
             console.error('Error updating task:', error);
@@ -52,7 +61,9 @@ function App() {
 
     const deleteTask = async (id) => {
         try {
-            await window.electronAPI.databaseQuery('DELETE FROM tasks WHERE id = ?', [id]);
+            await fetch(`http://localhost:3000/tasks/${id}`, {
+                method: 'DELETE',
+            });
             fetchTasks(); // Refresh task list
         } catch (error) {
             console.error('Error deleting task:', error);
@@ -65,7 +76,11 @@ function App() {
             return;
         }
         try {
-            await window.electronAPI.databaseQuery('UPDATE tasks SET title = ? WHERE id = ?', [newText, id]);
+            await fetch(`http://localhost:3000/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: newText })
+            });
             fetchTasks(); // Refresh task list
         } catch (error) {
             console.error('Error saving task:', error);

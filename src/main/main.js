@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain, Notification, globalShortcut } = require('electron');
 const path = require('path');
-const { promisePool, testConnection } = require(path.join(__dirname, '../backend/database'));
+const { promisePool} = require(path.join(__dirname, '../backend/api'));
 
 let mainWindow;
 let tray;
@@ -38,20 +38,18 @@ function createWindow() {
     });
 }
 
-// IPC Event Handlers
-
-// Test the database connection when the app starts
-app.on('ready', () => {
-    testConnection();
-});
 
 // Close the database connection when the app is about to quit
 app.on('will-quit', () => {
-    promisePool.end((err) => {
-        if (err) {
-            console.error('Error closing database connection:', err);
-        }
-    });
+    if (promisePool && typeof promisePool.end === 'function') {
+        promisePool.end((err) => {
+            if (err) {
+                console.error('Error closing database connection:', err);
+            } else {
+                console.log('Database connection closed successfully.');
+            }
+        });
+    }
 });
 
 ipcMain.handle('database-query', async (event, query, params) => {
